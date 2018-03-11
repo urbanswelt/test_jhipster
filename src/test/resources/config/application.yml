@@ -49,8 +49,8 @@ spring:
             cluster-nodes:
             properties:
                 path:
-                    logs: target/elasticsearch/log
-                    data: target/elasticsearch/data
+                    logs: build/elasticsearch/log
+                    data: build/elasticsearch/data
     mail:
         host: localhost
     messages:
@@ -96,7 +96,7 @@ jhipster:
     security:
         authentication:
             jwt:
-                secret: c9f4579eea52c12d1a8a8023f77f30743801aebf
+                secret: e8cf914a211c33861a28063095851528da647e62
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration

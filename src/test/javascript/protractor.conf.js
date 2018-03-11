@@ -1,14 +1,15 @@
-const HtmlScreenshotReporter = require("protractor-jasmine2-screenshot-reporter");
+const HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
 const JasmineReporters = require('jasmine-reporters');
 
 exports.config = {
     allScriptsTimeout: 20000,
 
-    suites: {
-        account: './e2e/account/*.js',
-        admin: './e2e/admin/*.js',
-        entity: './e2e/entities/*.js'
-    },
+    specs: [
+        './e2e/account/*.spec.ts',
+        './e2e/admin/*.spec.ts',
+        './e2e/entities/*.spec.ts',
+        /* jhipster-needle-add-protractor-tests - JHipster will add protractors tests here */
+    ],
 
     capabilities: {
         'browserName': 'chrome',
@@ -24,46 +25,25 @@ exports.config = {
 
     jasmineNodeOpts: {
         showColors: true,
-        defaultTimeoutInterval: 30000
+        defaultTimeoutInterval: 720000
+    },
+
+    beforeLaunch: function() {
+        require('ts-node').register({
+            project: ''
+        });
     },
 
     onPrepare: function() {
-        // Disable animations so e2e tests run more quickly
-        var disableNgAnimate = function() {
-            angular
-                .module('disableNgAnimate', [])
-                .run(['$animate', function($animate) {
-                    $animate.enabled(false);
-                }]);
-        };
-
-        var disableCssAnimate = function() {
-            angular
-                .module('disableCssAnimate', [])
-                .run(function() {
-                    var style = document.createElement('style');
-                    style.type = 'text/css';
-                    style.innerHTML = 'body * {' +
-                        '-webkit-transition: none !important;' +
-                        '-moz-transition: none !important;' +
-                        '-o-transition: none !important;' +
-                        '-ms-transition: none !important;' +
-                        'transition: none !important;' +
-                        '}';
-                    document.getElementsByTagName('head')[0].appendChild(style);
-                });
-        };
-
-        browser.addMockModule('disableNgAnimate', disableNgAnimate);
-        browser.addMockModule('disableCssAnimate', disableCssAnimate);
-
         browser.driver.manage().window().setSize(1280, 1024);
         jasmine.getEnv().addReporter(new JasmineReporters.JUnitXmlReporter({
-            savePath: 'target/reports/e2e',
+            savePath: 'build/reports/e2e',
             consolidateAll: false
         }));
         jasmine.getEnv().addReporter(new HtmlScreenshotReporter({
-            dest: "target/reports/e2e/screenshots"
+            dest: "build/reports/e2e/screenshots"
         }));
-    }
+    },
+
+    useAllAngular2AppRoots: true
 };
